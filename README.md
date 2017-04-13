@@ -9,12 +9,12 @@ Algorithmically, it doesn't matter if you are reading input from the console or 
 Let us say your data is entered in this manner (it can be in a file, or typed in):
 
 ```
-<data11> <delim11> <data12> <delim12> ..... <data1n> <delim1n /*often '\n' */>
-<data21> <delim21> <data22> <delim22> ..... <data2n> <delim2n /*often '\n' */>
+<data11> <delim1> <data12> <delim2> ..... <data1n> <delimn /*often '\n' */>
+<data21> <delim1> <data22> <delim2> ..... <data2n> <delimn /*often '\n' */>
 .
 .
 .
-<datam1> <delimm1> <datam2> <delimm2> ..... <datamn> <delimmn /*often '\n' */>
+<datam1> <delim1> <datam2> <delim2> ..... <datamn> <delimn /*often '\n' */>
 ```
 
 Each line is an *entry*, and each entry has several pieces of *data*, separated by *delimiters*. For example:
