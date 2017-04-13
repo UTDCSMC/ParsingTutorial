@@ -74,7 +74,7 @@ Here is a robust, battle-tested way of parsing data with such structure.
     // delimited by the last delimiter 'delimn', we will iterate.
     // 'delimn' is often the newline character '\n'.
     
-    while (getline(file, entry, 'delimn')) {            // Read an entry. 
+    while (getline(file, entry, 'delimn')) {            // Read an entry. Do getline(cin, entry, 'delimn') in case of console input.
         string rest = entry;                            // As we read data, we'll cut the entry short and remove what we have already read from it. 
         // Initially rest = entry because we haven't read anything.
         int read_from = 0;                              // We start reading the current piece of data from this index;
