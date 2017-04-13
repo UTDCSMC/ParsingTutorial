@@ -1,7 +1,8 @@
 # Parsing data line-by-line: A tutorial
 
->> Recognizing the inherent structure in your data, and parsing it in a logical manner solves half of your problems, and prevents the other half from arising.
->> -- A mentor (i.e. a coding ninja and guru you should listen to)
+> Recognizing the inherent structure in your data, and parsing it in a logical manner solves half of your problems, and prevents the other half from arising.
+>
+> -- A mentor (i.e. a coding ninja and guru you should listen to)
 
 Algorithmically, it doesn't matter if you are reading input from the console or from a file - they are both *input streams*. We'll assume it is in a file. Some comments along the way should help you do it for console input too.
 
@@ -19,12 +20,12 @@ Let us say your data is entered in this manner (it can be in a file, or typed in
 Each line is an *entry*, and each entry has several pieces of *data*, separated by *delimiters*. For example:
 
 ```
-Joy 20:00   Scottsdale, AZ  # Comment. Delimiters in order: (' ', ':', '\t', ',', '#', '\n')
+Joy 20:00   Scottsdale, AZ      # Comment. Delimiters in order: (' ', ':', '\t', ',', '#', '\n')
 Ward 21:30  New York City, NY   # Another comment. Not useful for the program.
 .
 .
 .
-Danny 23:00 Dallas, TX  # Last comment
+Danny 23:00 Dallas, TX          # Last comment
 ```
 
 Here is a robust, battle-tested way of parsing data with such structure. 
