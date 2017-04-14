@@ -79,7 +79,7 @@ Here is a robust, battle-tested way of parsing data with such structure.
         // Initially rest = entry because we haven't read anything.
         int read_from = 0;                              // We start reading the current piece of data from this index;
         string data1 = rest.substr(read_from,           // The substring of entry beginning at read_from
-            rest.find("delim1")                         // And ending at the index of the first delimiter.
+            rest.find("delim1") - read_from             // And ending at the index of the first delimiter.
         );                              
         if (/* needed data type for data1 is int (or float) */) {
             int data1Int = stoi(data1);                 // stof(data1) in case of float.
@@ -90,7 +90,7 @@ Here is a robust, battle-tested way of parsing data with such structure.
         // Do whatever with data1.
         read_from = entry.find("delim1") + 1;           // The next time we have to read something, it will be after delimiter 1.
         string data2 = rest.substr(read_from,           // The substring of entry beginning at read_from
-            rest.find("delim2")                         // And ending at the index of the second delimiter.
+            rest.find("delim2") - read_from             // And ending at the index of the second delimiter.
         );
         if (/* needed data type for data2 is int (or float) */) {
             int data2Int = stoi(data2);                 // stof(data2) in case of float.
