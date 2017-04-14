@@ -6,107 +6,141 @@
 
 Algorithmically, it doesn't matter if you are reading input from the console or from a file - they are both *input streams*. We'll assume it is in a file. Some comments along the way should help you do it for console input too.
 
-Let us say your data is entered in this manner (it can be in a file, or typed in):
+Let us say your data is entered in rows of
 
-```
-<data11> <delim1> <data12> <delim2> ..... <data1n> <delimn /*often '\n' */>
-<data21> <delim1> <data22> <delim2> ..... <data2n> <delimn /*often '\n' */>
-.
-.
-.
-<datam1> <delim1> <datam2> <delim2> ..... <datamn> <delimn /*often '\n' */>
-```
+    Fleet_Street 1212, Dallas TX
+    Barn_Street 3241, Los_Angelos CA
+    Drury_Lane 3591, Muffin MA
 
-Each line is an *entry*, and each entry has several pieces of *data*, separated by *delimiters*. For example:
+# C++ tools for strings
 
-```
-Joy 20:00   Scottsdale, AZ      # Comment. Delimiters in order: (' ', ':', '\t', ',', '#', '\n')
-Ward 21:30  New York City, NY   # Another comment. Not useful for the program.
-.
-.
-.
-Danny 23:00 Dallas, TX          # Last comment
-```
+-   C++ style strings are like arrays because they have positional indices.
 
-Here is a robust, battle-tested way of parsing data with such structure. 
-
-## 1.  C++
-1. Include:
-    - `<iostream>` - For `cin`, `cout` etc.
-    - `<fstream>` - For `ifstream`, `ofstream`, `fstream` etc.
-    - `<string>` - For using the `string` type.
-    - `<cstdlib>` - For using functions like `stoi`, `atoi`.
-    
- 2. Key functions:
-    - `string::substr(a, b)` - Returns a substring containing *b* characters, beginning from index *a* ([More](http://www.cplusplus.com/reference/string/string/substr/)).
-        ```cpp
-        string p = "Hello";
-        cout << p.substr(1,3);
-        // Output = "ell"
-        ```
-    - `string::substr(a)` - Returns the substring of the string beginning from index 'a', all the way to the end.
-        ```cpp
-        string p = "Hello"
-        cout << p.substr(1);
-        // Output = "ello"
-        ```
-    - `string::find(str)` - Returns the index where the string `str` appears inside this string. If it doesn't appear anywhere, returns `string::npos`.
-        ```cpp
-        string p = "Hello"
-        cout << p.find("llo");
-        // Output = 2
-        cout << p.find("elp");
-        // Return value = string::npos. Probably no printable output
-        if (p.find("elp") == string::npos) { cout << "yo"; }
-        // yo
-        ```
-        
- 3. Open the file:
     ```cpp
-    ifstream file("filepath");
-    ``` 
-    
- 4. Read and process the data one line (entry) at a time, in a loop over all entries:
-    ```cpp
-    string entry;                               // Holds one entry at a time.
-    
-    // While there are entries to read of the specified structure,
-    // delimited by the last delimiter 'delimn', we will iterate.
-    // 'delimn' is often the newline character '\n'.
-    
-    while (getline(file, entry, 'delimn')) {            // Read an entry. Do getline(cin, entry, 'delimn') in case of console input.
-        string rest = entry;                            // As we read data, we'll cut the entry short and remove what we have already read from it. 
-        // Initially rest = entry because we haven't read anything.
-        int read_from = 0;                              // We start reading the current piece of data from this index;
-        string data1 = rest.substr(read_from,           // The substring of entry beginning at read_from
-            rest.find("delim1")                         // And ending at the index of the first delimiter.
-        );                              
-        if (/* needed data type for data1 is int (or float) */) {
-            int data1Int = stoi(data1);                 // stof(data1) in case of float.
-            // if this doesn't work, try:
-            // int data1Int = atoi(data1.c_str());
-            // (atof in case of float).
-        }
-        // Do whatever with data1.
-        read_from = entry.find("delim1") + 1;           // The next time we have to read something, it will be after delimiter 1.
-        string data2 = rest.substr(read_from,           // The substring of entry beginning at read_from
-            rest.find("delim2")                         // And ending at the index of the second delimiter.
-        );
-        if (/* needed data type for data2 is int (or float) */) {
-            int data2Int = stoi(data2);                 // stof(data2) in case of float.
-            // if this doesn't work, try:
-            // int data2Int = atoi(data2.c_str());
-            // (atof in case of float).
-        }
-        // Do whatever with data2.
-        read_from = entry.find("delim2") + 1;           // The next time we have to read something, it will be after delimiter 1.
-        //.
-        //.
-        //. Parse all datai, from data1 through data_n, in this way.
-        //.
-        //.
-        // Do whatever with data_n. If it's a comment, ignore it.
-    }
+    string line = "hello world";
+    line[0]; // returns 'h'
+    line[1]; // returns 'e'
+    line[2]; // returns 'l'
+    ...
     ```
 
-See the pattern? Do it this way and we guarantee your project will go much smoother.
+-   Unlike arrays, they have functions that you can write after the dot.
+
+-   `string.find(string search)` - Returns the first index where the `search` appears inside the original string. If it doesn't appear anywhere, returns `string::npos` ([See use 1](http://www.cplusplus.com/reference/string/string/find/)).
+
+    ```cpp
+    string line = "Drury_Lane 3591, Muffin MA";
+    line.find("Lane"); // returns 6
+    line.find(" "); // returns 10
+    line.find("Blahlah"); // returns string::npos because it is not found
+    ```
+        
+-   `string.find(string search, int start)` - Is the same as `line.find(search_string)`, but it only begins searching after the index `start` ([See use 1](http://www.cplusplus.com/reference/string/string/find/)).
+
+    ```cpp
+    string line = "Drury_Lane 3591, Muffin MA";
+    line.find(" ", 0); // returns 10, which is the index of the space after "Drury_Lane'
+                       // because that is the first space starting from the index 0
+    line.find(" ", 10); // returns 10, which is the index of the space after "Drury_Lane"
+                        // because that is the first space starting from the index 10
+    line.find(" ", 10+1); // returns 16, which is the index of the space after the comma
+                          // because that is the first space starting from the index 10+1
+    ```
+
+-   `string.substr(int a, int b)` - Returns a substring containing `b` characters, beginning from index `a` ([More](http://www.cplusplus.com/reference/string/string/substr/)).
+    ```cpp
+    string line = "Drury_Lane 3591, Muffin MA";
+    line.substr(4, 11); // returns "y_Lane 3591"
+    ```
+-   `string.substr(int a)` - Returns the substring of the string beginning from index `a`, all the way to the end.
+    ```cpp
+    string line = "Drury_Lane 3591, Muffin MA";
+    line.substr(4); // "y_Lane 3591, Muffin MA";
+    ```
+
+# Basic example
+
+-   A delimiter is something that separates two fields in a line. 
+    ```cpp
+    string line = "first_part_data, second_part_data";
+
+    // because substr starts at 0 and cuts line.find(", ") characters
+    // but line.find(", ") returns the index of the first space
+    string first_part = line.substr(0, line.find(", ")); // returns "first_part_data"
+
+    // because line.substr starts at line.find(", ")+2 and takes the rest of the string
+    // and line.find(", ") finds the (start) of the comma-space
+    // and we want to start after the comma and after the space
+    string second_part = line.substr(line.find(", ") + 2); // returns "second_part_data";
+    ```
+
+# File example
+If the delimiter we are searching for has two characters (eg. ", "), then 
+
+```cpp
+  ifstream file ("input.txt");
+  string line;
+  while (getline(file, line, '\n')) {              // Read an entry. Do getline(cin, entry, '\n') in case of console input.
+	string street = line.substr(0, line.find(" ")); // returns "Drury_Lane"
+
+	// shorten line to exclude street
+	line = line.substr(line.find(" ") + 1); // returns "3591, Muffin MA";
+
+	string address_string = line.substr(0, line.find(", ")); // returns the string "3591"
+    // StringTOInteger is called STOI
+	int address = stoi(address_string); // returns the INTEGER 3591
+    // On some Windows Systems this won't work. Try
+    //int address = atoi(address_string.c_str()); // returns the INTEGER 3591
+
+	// shorten line to exclude address
+	line = line.substr(line.find(", ") + 2); // returns "Muffin MA";
+
+	string city = line.substr(0, line.find(" "));
+
+	// shorten line to exclude city
+	line = line.substr(line.find(" ") + 1);
+
+	string state = line;
+    
+	cout << "street=[" << street << "], address=[" << address << "], city=["
+		 << city << "], state=[" << state << "]" << endl;
+  }
+```
+
+# Example with error handling
+
+```cpp
+  ifstream file ("input.txt");
+  string line;
+  int split;
+  bool success;
+  while (getline(file, line, '\n')) {              // Read an entry. Do getline(cin, entry, '\n') in case of console input.
+	split = line.find(" ");
+	success = false;
+	if (split != string::npos) {
+	  string street = line.substr(0, split);
+	  line = line.substr(split + 1);
+
+	  split = line.find(", ");
+	  if (split != string::npos) {
+		string address_string = line.substr(0, split);
+		int address = stoi(address_string);
+		line = line.substr(line.find(", ") + 2);
+
+		split = line.find(" ");
+		if (split != string::npos) {
+		  string city = line.substr(0, split);
+		  line = line.substr(split + 1);
+
+		  string state = line;
+		  cout << "street=[" << street << "], address=[" << address << "], city=["
+			   << city << "], state=[" << state << "]" << endl;
+		  success = true;
+		}
+	  }
+	}
+	if (! success) {
+	  cout << "Unable to parse line after \"" << line << "\"" << endl;
+	}
+  }
+```
