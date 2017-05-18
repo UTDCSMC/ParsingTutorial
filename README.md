@@ -49,6 +49,7 @@ Let us say your data is entered in rows of
 
 -   `string.substr(int a, int b)` - Returns a substring containing `b` characters, beginning from index `a` ([More](http://www.cplusplus.com/reference/string/string/substr/)).
     ```cpp
+    
     string line = "Drury_Lane 3591, Muffin MA";
     line.substr(4, 11); // returns "y_Lane 3591"
     ```
